@@ -1,0 +1,12 @@
+#!/bin/sh
+
+BTADDR=$1
+DBNAME=$2
+
+rm -f blueproxy-error
+{ blueproxy -r $BTADDR -c 1 || touch blueproxy-error; } &
+sleep 10
+[ -e blueproxy-error ] || \
+    curl -H 'Content-Type: application/json' -X POST http://localhost:5984/_replicate \
+        -d ' {"source": "'$DBNAME'", "target": "http://localhost:20001/'$DBNAME'", "create_target": true} '
+
