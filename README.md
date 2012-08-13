@@ -76,6 +76,12 @@ Only N900 and GNU/Linux systems are currently supported.
 
 ### Related
 
+- https://code.google.com/p/haggle/ - Haggle - A content-centric
+  network architecture for opportunistic communication
+
+- http://ica1www.epfl.ch/haggle/ - Haggle - A European Union funded
+  project in Situated and Autonomic Communications
+
 ### Contact
 
 predrg@gmail.com
