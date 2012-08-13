@@ -1,6 +1,9 @@
 ## Automatic opportunistic data exchange over bluetooth on mobile devices
 
-Only N900 and GNU/Linux systems are currently supported.
+All devices have local CouchDB instance. This allows automatic
+propagation of data and couchapps operating on that data.
+
+Currently only tested on N900 and GNU/Linux systems.
 
 ### Requirements
 
