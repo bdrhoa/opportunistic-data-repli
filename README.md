@@ -110,9 +110,6 @@ couchapps) and changes will be propagated to other devices eventually.
 
 ### Todo
 
-- find other mobile devices by broadcasting on (W)LAN then replicate
-  over (W)LAN
-
 - couchapp examples
 
 - explicit replication initiation to support live local user couchapps
@@ -129,6 +126,8 @@ couchapps) and changes will be propagated to other devices eventually.
   - UI for adding known (of friends) bluetooth addresses
   - configuration screen
   - (maybe) embed Mobile Couchbase - https://github.com/couchbase/Android-Couchbase
+
+- tests
 
 - security, encryption...
 
