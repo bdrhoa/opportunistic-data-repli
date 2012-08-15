@@ -1,34 +1,42 @@
-## Automatic opportunistic data exchange over bluetooth on mobile devices (with CouchDB)
+## Automatic opportunistic data replication using CouchDB (over ethernet, WiFi and bluetooth)
+
+**STATUS: PROOF OF CONCEPT IMPLEMENTATION**
 
 All devices have local CouchDB instance. This allows automatic
 propagation of data and couchapps operating on that data.
 
-There are two modes of operation:
+Auto sync modes of operation:
 
-- auto sync with known bluetooth devices (by bluetooth address)
+- with (W)LAN peers discovered by network broadcast
 
-- auto sync with discoverable bluetooth devices [work in progress]
+- with known bluetooth devices (by bluetooth address)
 
-Tested on: Android 2.3.5, N900, ArchLinux
+- with discoverable bluetooth devices [work in progress]
+
+Tested on: Android 2.3.5, N900, ArchLinux.
 
 #### Setup on Android:
 
 - install and start MobileFuton -
   https://play.google.com/store/apps/details?id=com.mainerror.mobilefuton
 
-- create /mnt/sdcard/couchdb-repli-known_nodes.txt with following
-  format:
+- install and start precompiled Android Bluetooth CouchDB Replicator -
+  and-opp-couchdb-repli/bin/andoppcouchdbrepli-debug.apk
+
+- OR build it from source
+
+        $ cd and-opp-couchdb-repli
+        $ ant debug # .apk is created in bin subdir
+
+##### Configuration
+
+For bluetooth known-nodes mode, create
+/mnt/sdcard/couchdb-repli-known_nodes.txt with following format:
 
         HH:HH:HH:HH:HH:HH optional-device-description
         ...
 
-- install and start precompiled Android Bluetooth CouchDB Replicator -
-  and-bt-couchdb-repli/bin/andbtcouchdbrepli-debug.apk
-
-- OR build it from source
-
-        $ cd and-bt-couchdb-repli
-        $ ant debug # .apk is created in bin subdir
+HH:HH:HH:HH:HH:HH is bluetooth device address.
 
 #### Requirements on N900 and GNU/Linux
 
@@ -102,14 +110,22 @@ couchapps) and changes will be propagated to other devices eventually.
 
 ### Todo
 
-- few couchapp examples
+- find other mobile devices by broadcasting on (W)LAN then replicate
+  over (W)LAN
+
+- couchapp examples
 
 - explicit replication initiation to support live local user couchapps
 
 - create patch for blueproxy to support configurable (by command-line
   option) service class UUID
 
+- better local tcp port allocation
+
+- do refactoring, cleanup codebase
+
 - Android app:
+  - do all networking in Android service
   - UI for adding known (of friends) bluetooth addresses
   - configuration screen
   - (maybe) embed Mobile Couchbase - https://github.com/couchbase/Android-Couchbase

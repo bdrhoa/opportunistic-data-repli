@@ -5,40 +5,83 @@
 DBNAME=phy-f2f-acc-db
 echo DBNAME: $DBNAME
 
-MYBTADDR=$(sudo hciconfig hci0 | awk '/BD Address/ {print $3}')
-echo MYBTADDR: $MYBTADDR
-
-sync_with_known_nodes () {
-    cat couchdb-repli-known_nodes.txt | grep -v '^#' | while read btaddr name; do
-        if [ "$btaddr" != "$MYBTADDR" ]; then
-            echo ./couchdb-repli $btaddr $DBNAME "# $name"
-            ./couchdb-repli $btaddr $DBNAME
-        fi
-    done
-}
-
-sync_with_all_nodes () { # requires bluetooth visibility
-    for btaddr in $(hcitool scan | awk '!/^Scanning/ {print $1}'); do
-        if [ "$btaddr" != "$MYBTADDR" ]; then
-            echo ./couchdb-repli $btaddr $DBNAME
-            ./couchdb-repli $btaddr $DBNAME
-        fi
-    done
-}
-
 trap "kill -HUP -$$; echo cleanup done." EXIT # kill all child processes on exit
 
-blueproxy -p 5984 &
-(while true; do socat -d -d tcp-listen:20000,reuseaddr tcp-listen:20001,reuseaddr; sleep 1; done) &
+# bluetooth
+if [ 1 = 1 ]; then
 
-sleep 3
+    MYBTADDR=$(sudo hciconfig hci0 | awk '/BD Address/ {print $3}')
+    echo MYBTADDR: $MYBTADDR
 
-while true; do
-    echo `date`: start sync
+    sync_with_known_nodes () {
+        cat couchdb-repli-known_nodes.txt | grep -v '^#' | while read btaddr name; do
+            if [ "$btaddr" != "$MYBTADDR" ]; then
+                echo ./couchdb-repli $btaddr $DBNAME "# $name"
+                ./couchdb-repli $btaddr $DBNAME
+            fi
+        done
+    }
 
-    sync_with_known_nodes
-    #sync_with_all_nodes
+    sync_with_all_nodes () { # requires bluetooth visibility
+        for btaddr in $(hcitool scan | awk '!/^Scanning/ {print $1}'); do
+            if [ "$btaddr" != "$MYBTADDR" ]; then
+                echo ./couchdb-repli $btaddr $DBNAME
+                ./couchdb-repli $btaddr $DBNAME
+            fi
+        done
+    }
 
-    echo `date`: end sync
-    sleep 1800
-done
+    blueproxy -p 5984 &
+    (while true; do socat -d -d tcp-listen:20000,reuseaddr tcp-listen:20001,reuseaddr; sleep 1; done) &
+
+    {
+        sleep 3
+        while true; do
+            echo `date`: start sync
+
+            sync_with_known_nodes
+        #sync_with_all_nodes
+
+            echo `date`: end sync
+            sleep 1800
+        done
+    } &
+fi
+
+# LAN
+if [ 1 = 1 ]; then
+
+    { uname -a | grep N900; } && {
+        myip=$(sudo ifconfig | grep -A1 'Link encap:Ethernet' | grep 'inet addr' | awk '{print $2}' | cut -d: -f2)
+    } || {
+        myip=$(ip addr show | grep ' eth' | grep inet | awk '{print $2}' | cut -d/ -f1)
+    }
+    myport=5984
+    mycouchdb=http://$myip:$myport
+    echo mycouchdb: $mycouchdb
+
+    {   
+        # bcast sender
+        s="CouchDBReplication $mycouchdb"
+        while true; do
+            echo "bcast sender: $s" 1>&2
+            echo "$s"
+            sleep 600
+        done
+    } | {
+        # bcast receiver
+        while true; do
+            socat -T5 - UDP-DATAGRAM:255.255.255.255:44444,broadcast,sp=44444,reuseaddr | while read serviceName cdbURL; do
+                echo "bcast recv: $serviceName $cdbURL"
+                if [ "$serviceName" = "CouchDBReplication" ] && [ "$cdbURL" != "$mycouchdb" ]; then
+                    echo "bcast receiver: replicating to $cdbURL"
+                    curl -H 'Content-Type: application/json' -X POST "http://localhost:$myport/_replicate" \
+                        -d " {\"source\": \"$DBNAME\", \"target\": \"$cdbURL/$DBNAME\", \"create_target\": true} "
+                fi
+                break
+            done 
+        done
+    } &
+fi
+
+wait

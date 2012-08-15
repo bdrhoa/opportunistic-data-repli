@@ -1,0 +1,10 @@
+#!/bin/sh
+
+set -e
+adb uninstall xxx.crackleware.andoppcouchdbrepli || true
+#exit
+adb install bin/andoppcouchdbrepli-debug.apk
+adb shell am start -a android.intent.action.MAIN -n com.mainerror.mobilefuton/.MobileFutonActivity #; sleep 10
+adb shell am start -a android.intent.action.MAIN -n xxx.crackleware.andoppcouchdbrepli/.MainActivity
+adb shell logcat -c
+adb shell logcat -s 'AndroidRuntime:*' 'W/System.err:*' 'andoppcouchdbrepli:*'
