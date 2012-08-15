@@ -16,6 +16,12 @@ Tested on: Android 2.3.5, N900, ArchLinux
 - install and start MobileFuton -
   https://play.google.com/store/apps/details?id=com.mainerror.mobilefuton
 
+- create /mnt/sdcard/couchdb-repli-known_nodes.txt with following
+  format:
+
+        HH:HH:HH:HH:HH:HH optional-device-description
+        ...
+
 - install and start precompiled Android Bluetooth CouchDB Replicator -
   and-bt-couchdb-repli/bin/andbtcouchdbrepli-debug.apk
 
@@ -23,12 +29,6 @@ Tested on: Android 2.3.5, N900, ArchLinux
 
         $ cd and-bt-couchdb-repli
         $ ant debug # .apk is created in bin subdir
-
-- create /mnt/sdcard/couchdb-repli-known_nodes.txt with following
-  format:
-
-        HH:HH:HH:HH:HH:HH optional-device-description
-        ...
 
 #### Requirements on N900 and GNU/Linux
 
@@ -121,6 +121,10 @@ couchapps) and changes will be propagated to other devices eventually.
 
 - http://ica1www.epfl.ch/haggle/ - Haggle - A European Union funded
   project in Situated and Autonomic Communications
+
+### License
+
+WTFPL
 
 ### Contact
 
