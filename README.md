@@ -20,8 +20,8 @@ Tested on: Android 2.3.5, N900, ArchLinux.
 - install and start MobileFuton -
   https://play.google.com/store/apps/details?id=com.mainerror.mobilefuton
 
-- install and start precompiled Android Bluetooth CouchDB Replicator -
-  and-opp-couchdb-repli/bin/andoppcouchdbrepli-debug.apk
+- install and start precompiled Automatic Opportunistic CouchDB
+  Replicator - and-opp-couchdb-repli/bin/andoppcouchdbrepli-debug.apk
 
 - OR build it from source
 
@@ -83,17 +83,17 @@ HH:HH:HH:HH:HH:HH is bluetooth device address.
         $ cd $COUCHDBDIR
         $ bin/couchdb
 
-- install bt-opp-data-exch
+- install opportunistic-data-repli
 
-        $ git clone https://github.com/crackleware/bt-opp-data-exch
+        $ git clone https://github.com/crackleware/opportunistic-data-repli
 
 - (optional) in couchdb admin interface, create database
   'phy-f2f-acc-db'; database name is configurable in couchdb-repli-run
 
-- run bt-opp-data-exch
+- run opportunistic-data-repli
 
         $ screen # (or terminal)
-        $ cd bt-opp-data-exch
+        $ cd opportunistic-data-repli
         $ PATH=$BLUEPROXYDIR/bin:$PATH ./couchdb-repli-run
 
         $ # in regular x-terminal (not in debian chroot):
