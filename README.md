@@ -102,6 +102,10 @@ couchapps) and changes will be propagated to other devices eventually.
 
 ### Todo
 
+- few couchapp examples
+
+- explicit replication initiation to support live local user couchapps
+
 - create patch for blueproxy to support configurable (by command-line
   option) service class UUID
 
