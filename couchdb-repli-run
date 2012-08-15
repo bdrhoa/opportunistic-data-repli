@@ -9,7 +9,7 @@ MYBTADDR=$(sudo hciconfig hci0 | awk '/BD Address/ {print $3}')
 echo MYBTADDR: $MYBTADDR
 
 sync_with_known_nodes () {
-    cat known_nodes.txt | while read btaddr name; do
+    cat couchdb-repli-known_nodes.txt | grep -v '^#' | while read btaddr name; do
         if [ "$btaddr" != "$MYBTADDR" ]; then
             echo ./couchdb-repli $btaddr $DBNAME "# $name"
             ./couchdb-repli $btaddr $DBNAME
@@ -26,7 +26,7 @@ sync_with_all_nodes () { # requires bluetooth visibility
     done
 }
 
-trap "kill -HUP -$$" EXIT # kill all child processes on exit
+trap "kill -HUP -$$; echo cleanup done." EXIT # kill all child processes on exit
 
 blueproxy -p 5984 &
 (while true; do socat -d -d tcp-listen:20000,reuseaddr tcp-listen:20001,reuseaddr; sleep 1; done) &
@@ -36,8 +36,8 @@ sleep 3
 while true; do
     echo `date`: start sync
 
-    #sync_with_known_nodes
-    sync_with_all_nodes
+    sync_with_known_nodes
+    #sync_with_all_nodes
 
     echo `date`: end sync
     sleep 1800

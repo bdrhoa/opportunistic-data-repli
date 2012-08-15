@@ -1,18 +1,41 @@
-## Automatic opportunistic data exchange over bluetooth on mobile devices
+## Automatic opportunistic data exchange over bluetooth on mobile devices (with CouchDB)
 
 All devices have local CouchDB instance. This allows automatic
 propagation of data and couchapps operating on that data.
 
-Currently only tested on N900 and GNU/Linux systems.
+There are two modes of operation:
 
-### Requirements
+- auto sync with known bluetooth devices (by bluetooth address)
 
-- couchdb (1.2.0 tested) - http://couchdb.apache.org/
-- blueproxy (1.3 tested) - http://anil.recoil.org/projects/blueproxy.html
-- socat
-- curl
+- auto sync with discoverable bluetooth devices [work in progress]
 
-### Use
+Tested on: Android 2.3.5, N900, ArchLinux
+
+#### Setup on Android:
+
+- install and start MobileFuton -
+  https://play.google.com/store/apps/details?id=com.mainerror.mobilefuton
+
+- install and start precompiled Android Bluetooth CouchDB Replicator -
+  and-bt-couchdb-repli/bin/andbtcouchdbrepli-debug.apk
+
+- OR build it from source
+
+        $ cd and-bt-couchdb-repli
+        $ ant debug # .apk is created in bin subdir
+
+- create /mnt/sdcard/couchdb-repli-known_nodes.txt with following
+  format:
+
+        HH:HH:HH:HH:HH:HH optional-device-description
+        ...
+
+#### Requirements on N900 and GNU/Linux
+
+  - couchdb (1.2.0 tested) - http://couchdb.apache.org/
+  - blueproxy (1.3 tested) - http://anil.recoil.org/projects/blueproxy.html
+  - socat
+  - curl
 
 #### Setup on N900:
 
@@ -35,12 +58,13 @@ Currently only tested on N900 and GNU/Linux systems.
         $ make
         $ make install
 
-- install blueproxy from source
+- install blueproxy from patched source
 
         $ sudo apt-get install libbluetooth-dev
         $ wget http://anil.recoil.org/projects/blueproxy-1.3.tar.gz
         $ tar xzvf blueproxy-*.tar.gz
         $ cd blueproxy-*
+        $ patch -p1 < blueproxy-hardcoded-service-uuid-and-max-channels-limit.patch
         $ configure --prefix=$BLUEPROXYDIR
         $ make
         $ make install
@@ -69,13 +93,26 @@ Currently only tested on N900 and GNU/Linux systems.
 
 #### Setup on GNU/Linux:
 
-- very similar to N900 but running ./couchdb-repli-run is enough
+- very similar to N900 but running couchdb-repli-run is enough
+
+### Use
+
+Change data in DB on any device (with usual tools or through
+couchapps) and changes will be propagated to other devices eventually.
 
 ### Todo
 
-- security
+- create patch for blueproxy to support configurable (by command-line
+  option) service class UUID
 
-- Android, iOS
+- Android app:
+  - UI for adding known (of friends) bluetooth addresses
+  - configuration screen
+  - (maybe) embed Mobile Couchbase - https://github.com/couchbase/Android-Couchbase
+
+- security, encryption...
+
+- iOS app
 
 ### Related
 

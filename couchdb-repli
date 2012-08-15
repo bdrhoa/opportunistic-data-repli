@@ -3,8 +3,20 @@
 BTADDR=$1
 DBNAME=$2
 
+chn () {
+    # todo: find by service uuid 51981A19-5962-4A28-AD0F-2CE1654E16A2
+    sdptool browse $BTADDR | \
+        egrep 'CouchDBReplication|Blueproxy Serial Port|Channel' | \
+        egrep -A1 'CouchDBReplication|Blueproxy Serial Port' | \
+        tail -1 | awk '{print $2}'
+}
+
+chn=`chn`
+
+echo chn: $chn
+
 rm -f blueproxy-error
-{ blueproxy -r $BTADDR -c 1 || touch blueproxy-error; } &
+{ blueproxy -r $BTADDR -c $chn || touch blueproxy-error; } &
 sleep 10
 [ -e blueproxy-error ] || \
     curl -H 'Content-Type: application/json' -X POST http://localhost:5984/_replicate \
