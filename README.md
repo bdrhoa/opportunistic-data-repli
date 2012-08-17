@@ -20,8 +20,8 @@ Tested on: Android 2.3.5, N900, ArchLinux.
 - install and start MobileFuton -
   https://play.google.com/store/apps/details?id=com.mainerror.mobilefuton
 
-- install and start precompiled Automatic Opportunistic CouchDB
-  Replicator - and-opp-couchdb-repli/bin/andoppcouchdbrepli-debug.apk
+- install and start precompiled Auto Opportunistic CouchDB Replicator
+  - https://github.com/crackleware/opportunistic-data-repli/blob/master/and-opp-couchdb-repli/bin/andoppcouchdbrepli-debug.apk
 
 - OR build it from source
 
@@ -65,6 +65,8 @@ HH:HH:HH:HH:HH:HH is bluetooth device address.
         $ configure --prefix=$COUCHDBDIR
         $ make
         $ make install
+        
+        $ # edit $COUCHDBDIR/etc/local.ini, in [httpd], bind_address = 0.0.0.0
 
 - install blueproxy from patched source
 
@@ -112,6 +114,23 @@ couchapps) and changes will be propagated to other devices eventually.
 
 - couchapp examples
 
+- native Android apps:
+
+  - physical friend-to-friend networking (for info that you would
+    otherwise tell to people you meet but usually forget - no need for
+    reminders - just declare to share it eventually)
+
+  - auto insert captured semantically-(geo/face/object)-tagged media
+    (like images, video or sound recordings) into local couchdb for
+    later dissemination; subscribe to Android media creation
+    notifications
+
+  - knowledge and semantic web data acquisition and dissemination
+    (probably additionally externally indexed to enable efficient
+    processing)
+
+- partial replication (according to filters defined by user)
+
 - explicit replication initiation to support live local user couchapps
 
 - create patch for blueproxy to support configurable (by command-line
@@ -129,9 +148,12 @@ couchapps) and changes will be propagated to other devices eventually.
 
 - tests
 
+- distribute Auto Opportunistic CouchDB Replicator and other
+  native Android apps through play.google.com
+
 - security, encryption...
 
-- iOS app
+- iOS app (use TouchDB)
 
 ### Related
 
@@ -140,6 +162,10 @@ couchapps) and changes will be propagated to other devices eventually.
 
 - http://ica1www.epfl.ch/haggle/ - Haggle - A European Union funded
   project in Situated and Autonomic Communications
+
+- http://www.foo.be/forban/ - Forban - a simple link-local
+  opportunistic p2p free software (or how to share files with your
+  local neighbors)
 
 ### License
 
