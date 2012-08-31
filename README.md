@@ -21,7 +21,7 @@ Tested on: Android 2.3.5, N900, ArchLinux.
   https://play.google.com/store/apps/details?id=com.mainerror.mobilefuton
 
 - install and start precompiled Auto Opportunistic CouchDB Replicator
-  - https://github.com/crackleware/opportunistic-data-repli/blob/master/and-opp-couchdb-repli/bin/andoppcouchdbrepli-debug.apk
+  - https://github.com/crackleware/opportunistic-data-repli/blob/master/and-opp-couchdb-repli/bin/andoppcouchdbrepli-debug.apk?raw=true
 
 - OR build it from source
 
