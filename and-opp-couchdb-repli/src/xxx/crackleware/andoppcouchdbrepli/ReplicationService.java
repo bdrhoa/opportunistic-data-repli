@@ -195,8 +195,8 @@ public class ReplicationService extends IntentService {
     //final UUID SERVICE_UUID = UUID.fromString("00000003-0000-1000-8000-00805F9B34FB");
 
     final int SYNC_PERIOD = 30*60*1000; // msec
-    final int BCAST_PERIOD = 10*60*1000; // msec
-    // final int BCAST_PERIOD = 100; // msec
+    final int LAN_BCAST_PERIOD = 10*60*1000; // msec
+    final int LAN_REINIT_PERIOD = 5*60*1000; // msec
 
     final String DBNAME = "phy-f2f-acc-db";
     
@@ -266,13 +266,22 @@ public class ReplicationService extends IntentService {
         initBroadcast();
         mHandler.postDelayed(new Runnable() { public void run() {
             try {
+                initBroadcast();
+            } catch (Exception e) {
+                Log.d("andoppcouchdbrepli", "LAN reinit", e);
+            }
+            mHandler.postDelayed(this, LAN_REINIT_PERIOD);
+        } }, LAN_REINIT_PERIOD);
+        
+        mHandler.postDelayed(new Runnable() { public void run() {
+            try {
                 String s = String.format("%s %s\n", SERVICE_NAME, getCouchDBURL());
                 sendBroadcast(s.getBytes());
                 sendLogToActivity("sent bcast: '%s'", s.trim());
             } catch (Exception e) {
                 Log.d("andoppcouchdbrepli", "bcast sender", e);
             }
-            mHandler.postDelayed(this, BCAST_PERIOD);
+            mHandler.postDelayed(this, LAN_BCAST_PERIOD);
         } }, 5000);
 
         new Thread(new Runnable() { public void run() {
@@ -292,6 +301,7 @@ public class ReplicationService extends IntentService {
                     }
                 } catch (Exception e) {
                     Log.d("andoppcouchdbrepli", "bcast receiver", e);
+                    try { Thread.sleep(5000); } catch (Exception e1) { }
                 }
             }
         }}).start();
@@ -482,14 +492,19 @@ public class ReplicationService extends IntentService {
 
     final int BCAST_PORT = 44444;
     final int BCAST_DISCOVERY_PORT = 44444;
-    DatagramSocket mBcastSocket;
+    DatagramSocket mBcastSocket = null;
 
     void initBroadcast() throws IOException
     {
+        if (mBcastSocket != null) {
+            mBcastSocket.close();
+            mBcastSocket = null;
+        }
         sendLogToActivity("my ip addr: %s", getIPAddress());
         sendLogToActivity("bcast addr: %s", getBroadcastAddress());
         mBcastSocket = new DatagramSocket(BCAST_PORT);
         mBcastSocket.setBroadcast(true);
+        //mBcastSocket.setReuseAddress(true);
         mBcastSocket.setSoTimeout(300*1000);
     }
 
