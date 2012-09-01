@@ -24,6 +24,8 @@ Tested on: Android 2.3.5, N900, ArchLinux.
 
 - there is embeded Mobile Couchbase for Android initialized with mobilefuton db
 
+- all networking and initiation of replications is done in service
+
 - OR build it from source
 
         $ cd and-opp-couchdb-repli
