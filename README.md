@@ -9,13 +9,15 @@ Auto sync modes of operation:
 
 - with (W)LAN peers discovered by network broadcast
 
-- with known bluetooth devices (by bluetooth address)
+- with known bluetooth devices (by bluetooth address) - using bt<->tcp proxy
 
-- with discoverable bluetooth devices [work in progress]
+- with discoverable bluetooth devices [work in progress] - using bt<->tcp proxy
 
 Tested on: Android 2.3.5, N900, ArchLinux.
 
 #### Setup on Android:
+
+- enable WLAN and/or Bluetooth in Settings
 
 - install and start MobileFuton -
   https://play.google.com/store/apps/details?id=com.mainerror.mobilefuton
@@ -26,6 +28,7 @@ Tested on: Android 2.3.5, N900, ArchLinux.
 - OR build it from source
 
         $ cd and-opp-couchdb-repli
+        $ ant -f couchbase.xml 
         $ ant debug # .apk is created in bin subdir
 
 ##### Configuration
@@ -110,9 +113,16 @@ HH:HH:HH:HH:HH:HH is bluetooth device address.
 Change data in DB on any device (with usual tools or through
 couchapps) and changes will be propagated to other devices eventually.
 
+### Notes
+
+Couchbase.zip is from http://files.couchbase.com/developer-previews/mobile/android/android-couchbase-dp.zip
+
+mobilefuton.couch from https://github.com/daleharvey/Android-MobileFuton/blob/master/assets/mobilefuton.couch?raw=true
+
 ### Todo
 
-- couchapp examples
+- PKGBUILD
+- PKGBUILD for forban
 
 - native Android apps:
 
@@ -129,6 +139,9 @@ couchapps) and changes will be propagated to other devices eventually.
     (probably additionally externally indexed to enable efficient
     processing)
 
+  - sources of information are not important, automatic semantic data
+    enrichment (by correlation and similar) is important
+
 - partial replication (according to filters defined by user)
 
 - explicit replication initiation to support live local user couchapps
@@ -141,10 +154,10 @@ couchapps) and changes will be propagated to other devices eventually.
 - do refactoring, cleanup codebase
 
 - Android app:
-  - do all networking in Android service
   - UI for adding known (of friends) bluetooth addresses
   - configuration screen
-  - (maybe) embed Mobile Couchbase - https://github.com/couchbase/Android-Couchbase
+  - auto joining unprotected wifi networks (with option in UI)
+  - notify user if some other node initiates replication over (W)LAN
 
 - tests
 

@@ -5,7 +5,10 @@
 DBNAME=phy-f2f-acc-db
 echo DBNAME: $DBNAME
 
-trap "kill -HUP -$$; echo cleanup done." EXIT # kill all child processes on exit
+# kill all child processes on exit
+#trap "kill -KILL -$$; echo cleanup done." EXIT
+all_childs () { for p in $(pgrep -P $1); do echo $p; all_childs $p; done; }
+trap "kill -9 \$(all_childs $$); echo cleanup done." EXIT
 
 # bluetooth
 if [ 1 = 1 ]; then
@@ -40,7 +43,7 @@ if [ 1 = 1 ]; then
             echo `date`: start sync
 
             sync_with_known_nodes
-        #sync_with_all_nodes
+            #sync_with_all_nodes
 
             echo `date`: end sync
             sleep 1800
