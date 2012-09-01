@@ -112,6 +112,8 @@ HH:HH:HH:HH:HH:HH is bluetooth device address.
 #### Setup on ArchLinux:
 
         $ yaourt -S couchdb blueproxy-svc-uuid socat curl
+        # in /etc/couchdb/local.ini, section [httpd], set bind_address = 0.0.0.0
+        $ sudo /etc/rc.d/couchdb restart
         $ git clone https://github.com/crackleware/opportunistic-data-repli
         $ cd opportunistic-data-repli
         $ ./couchdb-repli-run
