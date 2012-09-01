@@ -19,11 +19,10 @@ Tested on: Android 2.3.5, N900, ArchLinux.
 
 - enable WLAN and/or Bluetooth in Settings
 
-- install and start MobileFuton -
-  https://play.google.com/store/apps/details?id=com.mainerror.mobilefuton
-
 - install and start precompiled Auto Opportunistic CouchDB Replicator
   - https://github.com/downloads/crackleware/opportunistic-data-repli/andoppcouchdbrepli-debug.apk
+
+- there is embeded Mobile Couchbase for Android initialized with mobilefuton db
 
 - OR build it from source
 
@@ -154,10 +153,15 @@ mobilefuton.couch from https://github.com/daleharvey/Android-MobileFuton/blob/ma
 - do refactoring, cleanup codebase
 
 - Android app:
+
+  - easy accessible link in activity to installed mobilefuton couchapp - should open android web browser
   - UI for adding known (of friends) bluetooth addresses
   - configuration screen
   - auto joining unprotected wifi networks (with option in UI)
   - notify user if some other node initiates replication over (W)LAN
+  - support replicating external couchdb servers
+
+    - for example, MobileFuton - https://play.google.com/store/apps/details?id=com.mainerror.mobilefuton
 
 - tests
 
