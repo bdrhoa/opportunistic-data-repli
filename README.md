@@ -78,7 +78,7 @@ HH:HH:HH:HH:HH:HH is bluetooth device address.
         $ wget http://anil.recoil.org/projects/blueproxy-1.3.tar.gz
         $ tar xzvf blueproxy-*.tar.gz
         $ cd blueproxy-*
-        $ patch -p1 < blueproxy-hardcoded-service-uuid-and-max-channels-limit.patch
+        $ patch -p1 < blueproxy-service-uuid-from-cmdline-and-max-channels-limit.patch
         $ configure --prefix=$BLUEPROXYDIR
         $ make
         $ make install
@@ -109,6 +109,13 @@ HH:HH:HH:HH:HH:HH is bluetooth device address.
 
 - very similar to N900 but running couchdb-repli-run is enough
 
+#### Setup on ArchLinux:
+
+        $ yaourt -S couchdb blueproxy-svc-uuid socat curl
+        $ git clone https://github.com/crackleware/opportunistic-data-repli
+        $ cd opportunistic-data-repli
+        $ ./couchdb-repli-run
+
 ### Use
 
 Change data in DB on any device (with usual tools or through
@@ -121,9 +128,6 @@ Couchbase.zip is from http://files.couchbase.com/developer-previews/mobile/andro
 mobilefuton.couch from https://github.com/daleharvey/Android-MobileFuton/blob/master/assets/mobilefuton.couch?raw=true
 
 ### Todo
-
-- PKGBUILD
-- PKGBUILD for forban
 
 - native Android apps:
 
@@ -146,9 +150,6 @@ mobilefuton.couch from https://github.com/daleharvey/Android-MobileFuton/blob/ma
 - partial replication (according to filters defined by user)
 
 - explicit replication initiation to support live local user couchapps
-
-- create patch for blueproxy to support configurable (by command-line
-  option) service class UUID
 
 - better local tcp port allocation
 

@@ -34,7 +34,7 @@ if [ 1 = 1 ]; then
         done
     }
 
-    blueproxy -p 5984 &
+    blueproxy -p 5984 -s 51981A19-5962-4A28-AD0F-2CE1654E16A2 &
     (while true; do socat -d -d tcp-listen:20000,reuseaddr tcp-listen:20001,reuseaddr; sleep 1; done) &
 
     {
